@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Project.Source.Shapes;
 using Project.Source.Utils;
+using Project.Source.Utils.AbstractFactory;
 
 namespace Project.Source
 {
@@ -166,14 +168,64 @@ namespace Project.Source
                 {
                     if (decorator.getShape() is CComposite group)
                     {
-                        while (group.Count != 0)
+                        while (group.Count > 1)
                         {
                             shapes.Add(group.getShape());
                             group.Remove();
                         }
-                        shapes.Remove(group);
+                        shapes.Add(group.getShape());
+                        shapes.Remove(shapes[i]);
                     }
                 }
+            }
+        }
+        public void loadShapes(string filename, IAbstractFactory abstractFactory)
+        {
+            if (!File.Exists(filename))
+                return;
+            using(StreamReader stream = File.OpenText(filename))
+            {
+                BaseShape shape;
+                string[] line = stream.ReadLine().Split(' ');
+                int amount = int.Parse(line.Last());
+                for(int i = 0; i < amount; ++i)
+                {
+                    shape = abstractFactory.createShape(stream.ReadLine());
+                    if(shape is CComposite group)
+                    {
+                        BaseShape shapeGroup;
+                        string[] lineGroup = stream.ReadLine().Split(' ');
+                        int amountGroup = int.Parse(lineGroup.Last());
+                        for(int j = 0; j < amountGroup; ++j)
+                        {
+                            shapeGroup = abstractFactory.createShape(stream.ReadLine());
+                            if(shapeGroup != null)
+                            {
+                                (shapeGroup as Shape).load(stream);
+                                shapeGroup = new CDecorator(shapeGroup);
+                                group.addShape(shapeGroup);
+                            }
+                        }
+                        shapes.Add(shape);
+                    }
+                    else
+                    {
+                        if(shape != null)
+                        {
+                            (shape as Shape).load(stream);
+                            shapes.Add(shape);
+                        }
+                    }
+                }
+            }
+        }
+        public void saveShapes(string filename)
+        {
+            using (StreamWriter stream = new StreamWriter(filename, false))
+            {
+                stream.WriteLine("Components' amount = " + shapes.Count);
+                foreach (BaseShape baseShape in shapes)
+                    baseShape.save(stream);
             }
         }
     }

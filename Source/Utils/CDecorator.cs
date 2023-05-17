@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,5 +58,6 @@ namespace Project.Source.Utils
         {
             return _shape.canMoveY(num, start, end);
         }
+        public void save(StreamWriter stream) { _shape.save(stream); }
     }
 }

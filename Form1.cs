@@ -11,6 +11,7 @@ using System.Windows.Forms;
 
 using Project.Source;
 using System.Runtime.InteropServices;
+using Project.Source.Utils.AbstractFactory;
 
 namespace Project
 {
@@ -141,6 +142,19 @@ namespace Project
         {
             shapes.ungroupShapes();
             pictureBoxDrawFigure.Refresh();
+        }
+
+        private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            string filepath = "saves.txt";
+            shapes.saveShapes(filepath);
+        }
+
+        private void FormMain_Shown(object sender, EventArgs e)
+        {
+            string filepath = "saves.txt";
+            IAbstractFactory factory = new CAbstractFactory();
+            shapes.loadShapes(filepath, factory);
         }
     }
 }

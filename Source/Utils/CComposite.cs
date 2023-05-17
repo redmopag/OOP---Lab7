@@ -1,8 +1,11 @@
 ﻿using Project.Source.Shapes;
+using Project.Source.Utils.AbstractFactory;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
@@ -84,6 +87,13 @@ namespace Project.Source.Utils
                 if (baseShape.inShape(x, y))
                     return true;
             return false;
+        }
+        public void save(StreamWriter stream)
+        {
+            stream.WriteLine("Group");
+            stream.WriteLine("Amount = " + _compShapes.Count);
+            foreach (BaseShape baseShape in _compShapes)
+                baseShape.save(stream);
         }
     }
 }

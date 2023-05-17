@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,5 +18,6 @@ namespace Project.Source.Shapes
         bool canMoveY(int num, int start, int end);
         void draw(Graphics gr); // Рисование фигуры
         bool inShape(int x, int y);
+        void save(StreamWriter stream);
     }
 }

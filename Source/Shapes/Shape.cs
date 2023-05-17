@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,8 @@ namespace Project.Source.Shapes
         public abstract Shape clone(); // Создание клона
         public abstract bool inShape(int x, int y); // Определение, находится ли курсор внутри фигуры
         public abstract void draw(Graphics gr); // Рисование фигуры
+        public abstract void save(StreamWriter stream);
+        public abstract void load(StreamReader stream);
 
         public bool canMoveX(int num, int start, int end)
         {

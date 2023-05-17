@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,6 +30,31 @@ namespace Project.Source.Shapes
             _shapePen.Color = _color;
             gr.DrawRectangle(_shapePen, centerX, centerY, _width, _height);
             _shapePen.Color = Color.Black;
+        }
+        public override void save(StreamWriter stream)
+        {
+            string write = "Square\nX = " + _x.ToString()
+                + "\nY = " + _y.ToString() + "\nHeight = " + _height.ToString()
+                + "\nWidth = " + _width.ToString();
+            stream.WriteLine(write);
+            string color = _color.ToString().Split(' ').Last();
+            color = color.Trim('[', ']');
+            stream.WriteLine("Color = " + color);
+        }
+        public override void load(StreamReader stream)
+        {
+            string[] values = new string[5];
+            for (int i = 0; i < 5; ++i)
+            {
+                string[] line = stream.ReadLine().Split(' ');
+                values[i] = line.Last();
+            }
+            _x = int.Parse(values[0]);
+            _y = int.Parse(values[1]);
+            _height = int.Parse(values[2]);
+            _width = int.Parse(values[3]);
+            values[4] = values[4].Trim('[', ']');
+            _color = Color.FromName(values[4]);
         }
     }
 }

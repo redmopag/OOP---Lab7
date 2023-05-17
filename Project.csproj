@@ -55,6 +55,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source\Shapes\BaseShape.cs" />
+    <Compile Include="Source\Utils\AbstractFactory\CAbstractFactory.cs" />
+    <Compile Include="Source\Utils\AbstractFactory\IAbstractFactory.cs" />
     <Compile Include="Source\Utils\CComposite.cs" />
     <Compile Include="Source\Utils\Container.cs" />
     <Compile Include="Source\Storage\MyArray.cs" />
