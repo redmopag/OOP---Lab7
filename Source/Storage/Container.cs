@@ -15,8 +15,8 @@ namespace Project.Source
     class Container
     {
         // Список фигур
-        //MyArray<Shape> shapes = new MyArray<Shape>();
-        private List<BaseShape> shapes = new List<BaseShape>();
+        MyArray<BaseShape> shapes = new MyArray<BaseShape>();
+        //private List<BaseShape> shapes = new List<BaseShape>();
 
         // Нажата ли клавиша ctrl для выделения нескольких фигур последовательно
         private bool isCtrl = false;

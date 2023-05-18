@@ -58,7 +58,7 @@
     <Compile Include="Source\Utils\AbstractFactory\CAbstractFactory.cs" />
     <Compile Include="Source\Utils\AbstractFactory\IAbstractFactory.cs" />
     <Compile Include="Source\Utils\CComposite.cs" />
-    <Compile Include="Source\Utils\Container.cs" />
+    <Compile Include="Source\Storage\Container.cs" />
     <Compile Include="Source\Storage\MyArray.cs" />
     <Compile Include="Source\Shapes\CCircle.cs" />
     <Compile Include="Source\Shapes\CSquare.cs" />

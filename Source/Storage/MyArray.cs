@@ -21,45 +21,51 @@ namespace Project.Source
         }
         public MyArray(int size)
         {
-            array = new T[size];
-            this.size = size;
+            if (size >= 0)
+            {
+                array = new T[size];
+                this.size = size;
+            }
+            else
+            {
+                array = new T[0];
+                size = 0;
+            }
         }
+
         public int Count => size;
+        public int Capacity => array.Length;
         public bool isEmpty { get => size == 0 ? true : false; }
         public void Clear()
         {
             array = new T[0];
             size = 0;
+            position = -1;
         }
+        private void ThrowIfInvalid(int index)
+        {
+            if ((index < 0) || (index >= size))
+                throw new IndexOutOfRangeException(nameof(index));
+        }
+        private void TryResize()
+        {
+            ++size;
+            if (array.Length < size)
+                Array.Resize(ref array, array.Length == 0 ? 1 : array.Length * 2);
+        }
+        private void InsertAt(int index, T item)
+        {
+            TryResize();
+            for (int i = size - 1; i > index; i--)
+                array[i] = array[i - 1];
+            array[index] = item;
+        }
+        public void Add(T item) => InsertAt(size, item);
+        public void AddFront(T item) => InsertAt(0, item);
         public void Insert(int index, T item)
         {
-            if (index >= 0 && index < size)
-            {
-                ++size;
-                Array.Resize(ref array, size);
-                for (int i = size - 1; i > index; --i)
-                    array[i] = array[i - 1];
-                array[index] = item;
-
-            }
-            else if (index < 0)
-                AddFront(item);
-            else
-                Add(item);
-        }
-        public void Add(T item)
-        {
-            ++size;
-            Array.Resize(ref array, size);
-            array[size - 1] = item;
-        }
-        public void AddFront(T item)
-        {
-            ++size;
-            Array.Resize(ref array, size);
-            for (int i = size - 1; i > 0; --i)
-                array[i] = array[i - 1];
-            array[0] = item;
+            ThrowIfInvalid(index);
+            InsertAt(index, item);
         }
         private int IndexOf(T x)
         {
@@ -76,8 +82,7 @@ namespace Project.Source
         }
         public void RemoveAt(int index)
         {
-            if (index >= size || index < 0)
-                throw new IndexOutOfRangeException(nameof(index));
+            ThrowIfInvalid(index);
 
             size--;
             if (index < size)
@@ -86,21 +91,6 @@ namespace Project.Source
             }
         }
         public void Remove(T item) => RemoveAt(IndexOf(item));
-        //public void Change(T item1, T item2)
-        //{
-        //    int index = IndexOf(item1);
-        //    if (index == -1)
-        //        throw new IndexOutOfRangeException(nameof(item1));
-        //    RemoveAt(index);
-        //    Insert(index, item2);
-        //}
-        private void ThrowIfInvalid(int index)
-        {
-            if ((index < 0) || (index >= size))
-            {
-                throw new IndexOutOfRangeException(nameof(index));
-            }
-        }
         public T this[int i]
         {
             get
@@ -121,16 +111,16 @@ namespace Project.Source
         }
         //----------------------------------------------------------------
         // Foreach
-        //IEnumerator and IEnumerable require these methods.
         public IEnumerator GetEnumerator()
         {
-            return array.GetEnumerator();
+            Reset();
+            return (IEnumerator)this;
         }
         //IEnumerator
         public bool MoveNext()
         {
             position++;
-            return (position < array.Length);
+            return (position < size);
         }
         //IEnumerable
         public void Reset()
@@ -138,13 +128,9 @@ namespace Project.Source
             position = -1;
         }
         //IEnumerable
-        public T Current
+        public object Current
         {
-            get { try { return array[position]; } catch (IndexOutOfRangeException) { throw new InvalidOperationException(); } }
-        }
-        object IEnumerator.Current //Метод должен возвращать текущий элемент списка.
-        {
-            get { return Current; }
+            get { return array[position]; }
         }
         public void Dispose() { }
     }
